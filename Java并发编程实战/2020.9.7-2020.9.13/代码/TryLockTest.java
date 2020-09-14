@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author sangshanchun
- * @brief tryLock()在获取不到锁的情况下会一直等待，使用tryLock(time, unit)可以避免死锁
+ * @brief tryLock()在获取不到锁的情况下不会一直等待，使用tryLock(time, unit)可以避免死锁
  * @date 2020/9/12 13:49
  */
 public class TryLockTest {
