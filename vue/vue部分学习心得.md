@@ -1,0 +1,122 @@
+v-on
+
+绑定事件，语法：`v-on:click="say"` or `v-on:click="say('参数', $event)"`
+
+简写：`@click="say"`，说明：绑定的事件从`methods`中获取
+
+如下，使用逗号分割可以绑定多个事件
+
+```html
+<div v-on="click:onClick, keyup:onKeyup, keydown:onKeydown"></div>
+```
+
+事件修饰符
+
+- `.stop` 阻止冒泡，调用 event.stopPropagation() // 比如说一个div下有一个弹窗和一个表单 点击提交按钮点击了<input type="submit"/>提交表单信息 点击弹出层周边空白区域，关闭弹窗 ，当表单显示在弹窗层上方时，为防止弹窗被意外关闭，需要阻止表单提交按钮冒泡行为
+- `.prevent` 阻止默认事件，调用 event.preventDefault() // 比如说点击了链接标签a,在跳转之前，要修改一些URL参数 
+- `.capture` 添加事件侦听器时使用事件`捕获`模式  // 捕获阶段先于冒泡，如果在尽量顶层处理事件，然后阻止传播，可以略微节约性能开销。scroll/resize 这类可能连续触发的事件不冒泡的原因
+
+v-model
+
+​		双向绑定，绑定的必须是表单元素，比如input、select，任意修改一方都会在页面上刷新并引起另一方的改变。
+
+v-for
+
+​		遍历列表元素，使用`v-for`更新已渲染的元素列表时，默认用`就地复用`策略；列表数据修改的时候，它会根据key值去判断某个值是否修改,如果修改，则重新渲染这一项，否则复用之前的元素。
+
+```html
+<div v-for="(item, index) in list" :key="item.id" >{{item.name}}</div>
+```
+
+v-if和v-show的区别
+
+​		v-if：根据表达式的值的真假条件，销毁或重建元素v-if适合条件不大可能改变的场景
+
+​		v-show：根据表达式之真假值，切换元素的属性，dom元素一直在v-show适合频繁切换
+
+过滤器filter
+
+​		针对一些数据 进行筛选、过滤、格式化等相关的处理，本质是一个带有参数带有返回值的方法，只能用在{{}}和v-bind里。
+
+```html
+filter(value) {
+    return value + "***";
+}
+<div>
+    <p>{{aaa|filter}}</p>
+</div>
+```
+
+生命周期
+
+​		由八个挂钩函数构成，vue内置的函数
+
+```html
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      message: 'Vue的生命周期'
+    },
+
+    beforeCreate: function() {
+      console.group('------beforeCreate创建前状态------');
+      console.log("%c%s", "color:red" , "el     : " ,this.$el); //undefined
+      console.log("%c%s", "color:red","data   : " ,this.$data); //undefined 
+      console.log("%c%s", "color:red","message: " + this.message) 
+      this.test('beforeCreate');
+      
+    },
+    created: function() {
+      console.group('------created创建完毕状态------');
+      console.log("%c%s", "color:red","el     : " ,this.$el); //undefined
+      console.log("%c%s", "color:red","data   : " ,this.$data); //已被初始化 
+      console.log("%c%s", "color:red","message: " + this.message); //已被初始化
+      this.test('created');
+    },
+    beforeMount: function() {
+      console.group('------beforeMount挂载前状态------');
+      console.log("%c%s", "color:red","el     : " + (this.$el)); //已被初始化
+      console.log(this.$el);
+      console.log("%c%s", "color:red","data   : " ,this.$data); //已被初始化  
+      console.log("%c%s", "color:red","message: " + this.message); //已被初始化  
+    },
+    mounted: function() {
+      console.group('------mounted 挂载结束状态------');
+      console.log("%c%s", "color:red","el     : " ,this.$el); //已被初始化
+      console.log(this.$el);    
+      console.log("%c%s", "color:red","data   : " ,this.$data); //已被初始化
+      console.log("%c%s", "color:red","message: " + this.message); //已被初始化 
+    },
+    beforeUpdate: function () {
+      console.group('beforeUpdate 更新前状态===============》');
+      console.log("%c%s", "color:red","el     : " ,this.$el);
+      console.log(this.$el);   
+      console.log("%c%s", "color:red","data   : " ,this.$data); 
+      console.log("%c%s", "color:red","message: " + this.message); 
+    },
+    updated: function () {
+      console.group('updated 更新完成状态===============》');
+      console.log("%c%s", "color:red","el     : " ,this.$el);
+      console.log(this.$el); 
+      console.log("%c%s", "color:red","data   : " ,this.$data); 
+      console.log("%c%s", "color:red","message: " + this.message); 
+    },
+    beforeDestroy: function () {
+      alert();
+      console.group('beforeDestroy 销毁前状态===============》');
+      console.log("%c%s", "color:red","el     : " ,this.$el);
+      console.log(this.$el);    
+      console.log("%c%s", "color:red","data   : " ,this.$data); 
+      console.log("%c%s", "color:red","message: " + this.message); 
+    },
+    destroyed: function () {
+      console.group('destroyed 销毁完成状态===============》');
+      console.log("%c%s", "color:red","el     : " ,this.$el);
+      console.log(this.$el);  
+      console.log("%c%s", "color:red","data   : " ,this.$data); 
+      console.log("%c%s", "color:red","message: " + this.message)
+    }
+  })
+</script>
+```
